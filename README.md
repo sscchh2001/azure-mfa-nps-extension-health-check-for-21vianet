@@ -24,8 +24,8 @@ Download and run the `MFA_NPS_Troubleshooter.ps1` script from this GitHub repo.
 
 The script performs the following test against MFA Extension Server:
 
-1. Check accessibility to https://login.microsoftonline.com
-1. Check accessibility to https://adnotifications.windowsazure.com
+1. Check accessibility to https://login.partner.microsoftonline.cn
+1. Check accessibility to https://adnotifications.windowsazure.cn
 1. Check MFA version.
 1. Check if the NPS Service is *Running*.
 1. Check if the SPN for Azure MFA is *Exist* and *Enabled*.
