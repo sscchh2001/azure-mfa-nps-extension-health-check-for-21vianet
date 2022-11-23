@@ -49,7 +49,7 @@ $Choice_Number = Read-Host -Prompt "Invalid Option, Based on which test you need
 Function Check_Nps_Server_Module {
 $IWRADNotificationScriptBlock = {
 	try{
-		Invoke-WebRequest -Uri https://adnotifications.windowsazure.com
+		Invoke-WebRequest -Uri https://adnotifications.windowsazure.cn
 	}
 	catch{
 		#This is the expected response for an unauthenticated request to the endpoint
@@ -92,9 +92,9 @@ Write-Host
 Write-Host
 write-host
 
-# Check the accessibility to login.microsoftonline.com and adnotifications.windowsazure.com
+# Check the accessibility to login.partner.microsoftonline.cn and adnotifications.windowsazure.cn
 
-write-Host "1- Checking Accessibility to https://login.microsoftonline.com ..." -ForegroundColor Yellow
+write-Host "1- Checking Accessibility to https://login.partner.microsoftonline.cn ..." -ForegroundColor Yellow
 write-Host
 
 #Muath Updates:
@@ -120,14 +120,14 @@ Unregister-ScheduledTask -TaskName $GUID -Confirm:$false
 } 
 
 ########################################################################
-$TCPLogin = (RunPSScript -PSScript "Test-NetConnection -ComputerName  login.microsoftonline.com -Port 443").TcpTestSucceeded
-$DNSLogin = (RunPSScript -PSScript "Test-NetConnection -ComputerName  login.microsoftonline.com -Port 443").NameResolutionSucceeded
+$TCPLogin = (RunPSScript -PSScript "Test-NetConnection -ComputerName  login.partner.microsoftonline.cn -Port 443").TcpTestSucceeded
+$DNSLogin = (RunPSScript -PSScript "Test-NetConnection -ComputerName  login.partner.microsoftonline.cn -Port 443").NameResolutionSucceeded
 
-$IWRLogin = (RunPSScript -PSScript "Invoke-WebRequest -Uri https://login.microsoftonline.com").StatusDescription
+$IWRLogin = (RunPSScript -PSScript "Invoke-WebRequest -Uri https://login.partner.microsoftonline.cn").StatusDescription
 
 ########################################################################
-$TCPAdnotification = (RunPSScript -PSScript "Test-NetConnection -ComputerName adnotifications.windowsazure.com -Port 443").TcpTestSucceeded
-$DNSADNotification = (RunPSScript -PSScript "Test-NetConnection -ComputerName adnotifications.windowsazure.com -Port 443").NameResolutionSucceeded
+$TCPAdnotification = (RunPSScript -PSScript "Test-NetConnection -ComputerName adnotifications.windowsazure.cn -Port 443").TcpTestSucceeded
+$DNSADNotification = (RunPSScript -PSScript "Test-NetConnection -ComputerName adnotifications.windowsazure.cn -Port 443").NameResolutionSucceeded
 
 $IWRADNotification = (RunPSScript -PSScript $IWRADNotificationScriptBlock)
 
@@ -137,10 +137,10 @@ $IWRADNotification = (RunPSScript -PSScript $IWRADNotificationScriptBlock)
 if (($TCPLogin -and $DNSLogin) -or $IWRLogin)
 {
 
-### write-Host "Test login.microsoftonline.com accessibility Passed" -ForegroundColor Green 
+### write-Host "Test login.partner.microsoftonline.cn accessibility Passed" -ForegroundColor Green 
 
 
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Access To https://login.MicrosoftOnline.Com';'Result'='Test Passed';'recommendations' ="N/A";'Notes' = "N/A"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Access To https://login.partner.microsoftonline.cn';'Result'='Test Passed';'recommendations' ="N/A";'Notes' = "N/A"}
 
 
 $loginAccessResult = "True"
@@ -150,16 +150,16 @@ $loginAccessResult = "True"
 Else
 
 {
-### write-Host "Test login.microsoftonline.com accessibility Failed" -ForegroundColor Red
+### write-Host "Test login.partner.microsoftonline.cn accessibility Failed" -ForegroundColor Red
 
 $loginAccessResult = "False"
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to https://login.MicrosoftOnline.Com';'Result'='Test Failed';'recommendations' ="Follow MS article for remediation: https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-nps-extension#network-requirements";'Notes' = "This will cause MFA Methods to fail"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to login.partner.microsoftonline.cn';'Result'='Test Failed';'recommendations' ="Follow MS article for remediation: https://docs.azure.cn/active-directory/authentication/howto-mfa-nps-extension#network-requirements";'Notes' = "This will cause MFA Methods to fail"}
 
 
 }
 
 
-write-Host "2- Checking Accessibility to https://adnotifications.windowsazure.com ..." -ForegroundColor Yellow
+write-Host "2- Checking Accessibility to https://adnotifications.windowsazure.cn ..." -ForegroundColor Yellow
 Write-Host
 
 
@@ -168,12 +168,12 @@ if (($TCPAdnotification -and $DNSADNotification) -or $IWRADNotification)
 
 {
 
-### write-Host "Test adnotifications.windowsazure.com accessibility Passed" -ForegroundColor Green
+### write-Host "Test adnotifications.windowsazure.cn accessibility Passed" -ForegroundColor Green
 
 $NotificationaccessResult = "True"
 
 
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to https://adnotifications.windowsazure.com';'Result'='Test Passed';'recommendations' ="N/A";'Notes' = "N/A"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to https://adnotifications.windowsazure.cn';'Result'='Test Passed';'recommendations' ="N/A";'Notes' = "N/A"}
 
 
 
@@ -182,12 +182,12 @@ $objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity
 Else
 
 {
-### write-Host "Test https://adnotifications.windowsazure.com accessibility Failed" -ForegroundColor Red
+### write-Host "Test https://adnotifications.windowsazure.cn accessibility Failed" -ForegroundColor Red
 
 $NotificationaccessResult = "False"
 
 
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to adnotifications.windowsazure.com accessibility';'Result'='Test Failed';'recommendations' ="Follow MS article for remediation:https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-nps-extension#network-requirements";'Notes' = "This will cause MFA Methods to fail"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking accessiblity to adnotifications.windowsazure.cn accessibility';'Result'='Test Failed';'recommendations' ="Follow MS article for remediation:https://docs.azure.cn/active-directory/authentication/howto-mfa-nps-extension#network-requirements";'Notes' = "This will cause MFA Methods to fail"}
 
 
 }
@@ -369,7 +369,7 @@ Else
 
 $FirstSetofReg = "False"
 
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking if Auth\Extension Registries have the correct values';'Result'='Test Failed';'recommendations' ="Follow MS article: https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-nps-extension-errors#troubleshooting-steps-for-common-errors";'Notes' = "As a quick solution, you can Re-register MFA extension again"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking if Auth\Extension Registries have the correct values';'Result'='Test Failed';'recommendations' ="Follow MS article: https://docs.azure.cn/active-directory/authentication/howto-mfa-nps-extension-errors#troubleshooting-steps-for-common-errors";'Notes' = "As a quick solution, you can Re-register MFA extension again"}
 
 }
 
@@ -386,7 +386,7 @@ $CLIENT_ID = (Get-ItemProperty -path HKLM:\SOFTWARE\Microsoft\AzureMfa -name "CL
 
 $STS_URL = (Get-ItemProperty -path HKLM:\SOFTWARE\Microsoft\AzureMfa -name "STS_URL").STS_URL
 
-if ($AZURE_MFA_HOSTNAME -eq "adnotifications.windowsazure.com" -and $AZURE_MFA_TARGET_PATH -eq "StrongAuthenticationService.svc/Connector" -and $CLIENT_ID -eq "981f26a1-7f43-403b-a875-f8b09b8cd720" -and $STS_URL -eq "https://login.microsoftonline.com/")
+if ($AZURE_MFA_HOSTNAME -eq "adnotifications.windowsazure.cn" -and $AZURE_MFA_TARGET_PATH -eq "StrongAuthenticationService.svc/Connector" -and $CLIENT_ID -eq "981f26a1-7f43-403b-a875-f8b09b8cd720" -and $STS_URL -eq "https://login.partner.microsoftonline.cn/")
 
 {
 
@@ -486,7 +486,7 @@ for ($x=0;$x -lt $MatchedCert.Count ; $x++) {
                    $certificateResult = "False"
                    $ValidCertThumbprint = "False"
                    
-$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking if there is a matched certificate with Azure MFA';'Result'='Test Failed';'recommendations' ="Re-register the MFA NPS Extension again to generate new certifictae, more info: https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-nps-extension#how-do-i-verify-that-the-client-cert-is-installed-as-expected";'Notes' = "N/A"}
+$objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking if there is a matched certificate with Azure MFA';'Result'='Test Failed';'recommendations' ="Re-register the MFA NPS Extension again to generate new certifictae, more info: https://docs.azure.cn/active-directory/authentication/howto-mfa-nps-extension#how-do-i-verify-that-the-client-cert-is-installed-as-expected";'Notes' = "N/A"}
 
                    }
 
@@ -538,7 +538,7 @@ $objects += New-Object -Type PSObject -Prop @{'Test Name'='Checking if there is 
  ### Write-Host 'No Valid certificate' -ForegroundColor Red
 
   $certificateResult = "False"
-  $objects += New-Object -Type PSObject -Prop @{'Test Name'='Check if there is a matched certificate with Azure MFA';'Result'='Test Failed';'recommendations' ="Re-register the MFA NPS Extension again to generate new certifictae, more info: https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-nps-extension#how-do-i-verify-that-the-client-cert-is-installed-as-expected";'Notes' = "N/A"}
+  $objects += New-Object -Type PSObject -Prop @{'Test Name'='Check if there is a matched certificate with Azure MFA';'Result'='Test Failed';'recommendations' ="Re-register the MFA NPS Extension again to generate new certifictae, more info: https://docs.azure.cn/active-directory/authentication/howto-mfa-nps-extension#how-do-i-verify-that-the-client-cert-is-installed-as-expected";'Notes' = "N/A"}
 
 
 }
@@ -843,7 +843,7 @@ Write-Host
 
 Write-Host "User" $Global:UPN "is Blocked to sign in to Azure AD ... Test FAILED" -ForegroundColor Red
 
-Write-Host "Refer to: https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-users-profile-azure-portal#to-add-or-change-profile-information for more info about this .... Test will continue to detect additional issue(s), Please make sure that the user is allowed to sign in to Azure AD" -ForegroundColor Red
+Write-Host "Refer to: https://docs.azure.cn/active-directory/fundamentals/active-directory-users-profile-azure-portal#add-or-change-profile-information for more info about this .... Test will continue to detect additional issue(s), Please make sure that the user is allowed to sign in to Azure AD" -ForegroundColor Red
 
 Write-Host
 
@@ -891,7 +891,7 @@ Write-Host
 
 Write-Host "User" $Global:UPN "did NOT Complete the MFA Proofup at all or Admin require the user to provide MFA method again ... Test FAILED" -ForegroundColor Red
 
-Write-Host "Please refer to https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-getstarted#get-users-to-enroll for more info ... Test will continue to detect additional issue(s), Please make sure that the user status is HEALTHY in Azure AD" -ForegroundColor Red
+Write-Host "Please refer to https://docs.azure.cn/active-directory/authentication/howto-mfa-getstarted#get-users-to-enroll for more info ... Test will continue to detect additional issue(s), Please make sure that the user status is HEALTHY in Azure AD" -ForegroundColor Red
 
 Write-Host
 
@@ -921,7 +921,7 @@ Write-Host
 
 
 #Check the user assigned licenses, usually even the user don't have direct assigned license the MFA will not fail, so only warning we will throw here if the user have no license assigned
-# refer to this for the plans: https://docs.microsoft.com/en-us/azure/active-directory/users-groups-roles/licensing-service-plan-reference
+# refer to this for the plans: https://docs.azure.cn/active-directory/enterprise-users/licensing-service-plan-reference
 
 
 Write-Host "Checking if" $Global:UPN "has a valid license for MFA ... " -ForegroundColor Yellow
